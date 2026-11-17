@@ -104,6 +104,8 @@ h1 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:
 .well svg{width:18px;height:18px;color:var(--ink-3);flex:0 0 auto}
 .well input{all:unset;flex:1;min-width:0;font:inherit;font-size:16px;color:var(--ink);height:100%}
 .well input::placeholder{color:var(--ink-4)}
+.well input[readonly]{color:var(--ink)}
+.lockchip{font-size:11px;font-weight:500;color:#7ff5d6;padding:4px 9px;border-radius:999px;background:rgba(79,227,193,.14);box-shadow:inset 0 0 0 1px rgba(79,227,193,.3)}
 .cc{color:var(--ink-2);font-size:15px;padding-right:10px;border-right:1px solid rgba(255,255,255,.1);font-variant-numeric:tabular-nums}
 
 .seg{position:relative;display:grid;grid-template-columns:1fr 1fr;padding:5px;border-radius:18px;
@@ -191,7 +193,7 @@ body.is-live nav{margin-bottom:14px}
 .hint{font-size:12px;color:var(--ink-4);text-align:center}
 
 /* ============ DONE ============ */
-#done{align-items:center;justify-content:center}
+#done,#locked{align-items:center;justify-content:center}
 .done{max-width:540px;width:100%;text-align:center;padding:44px 32px 34px}
 .done > *{position:relative;z-index:3}
 .check{width:96px;height:96px;margin:0 auto 22px;border-radius:50%;display:grid;place-items:center;position:relative;
@@ -258,10 +260,11 @@ body.is-live nav{margin-bottom:14px}
         <div class="well">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
           <input id="name" autocomplete="name" placeholder="Priya Ramesh" required>
+          <span class="lockchip" id="nameLock" hidden>Invited</span>
         </div>
       </div>
 
-      <div class="field">
+      <div class="field" id="phoneField">
         <label for="phone">WhatsApp number</label>
         <div class="well">
           <span class="cc" id="ccLabel">+91</span>
@@ -320,6 +323,18 @@ body.is-live nav{margin-bottom:14px}
     <div class="hint">Janani ends the call when the interview is complete.</div>
   </section>
 
+  <!-- LOCKED -->
+  <section class="screen" id="locked">
+    <div class="done glass" style="margin:auto">
+      <span class="sheen"></span>
+      <div class="check" style="background:radial-gradient(circle at 35% 25%,#ffd9a6,#ffb86b 45%,#c9762a);box-shadow:inset 0 2px 1px rgba(255,255,255,.7),inset 0 -10px 20px rgba(80,40,0,.35),0 20px 60px -10px rgba(255,184,107,.6)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:none;animation:none"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      </div>
+      <h2 id="lockTitle">Invite <em>only</em></h2>
+      <p id="lockMsg">This interview opens with a personal invite link. Please use the link the AI Essentials team sent you on WhatsApp.</p>
+    </div>
+  </section>
+
   <!-- DONE -->
   <section class="screen" id="done">
     <div class="done glass">
@@ -341,6 +356,10 @@ body.is-live nav{margin-bottom:14px}
 import { Conversation } from "./elevenlabs-client.js";
 
 const AGENT_ID = "agent_7801m7m6ywp8fqgrf65ffy86gnv0";
+/* Invite gate: when WORKER is set, the page only works with a personal one-time link (?i=…). */
+const WORKER = "";
+const INVITE = new URLSearchParams(location.search).get("i");
+let invite = null; // { name, phone } once validated
 const $ = id => document.getElementById(id);
 let lang = "en", conv = null, t0 = 0, tick = null, raf = null, muted = false, userEnded = false, connectedOnce = false;
 
@@ -398,13 +417,41 @@ function animate(){
 }
 function stopAll(){ clearInterval(tick); cancelAnimationFrame(raf); }
 
+function lock(title, msg){
+  $("lockTitle").innerHTML = title; $("lockMsg").textContent = msg; show("locked");
+}
+const LOCK = {
+  used:    ["Link already <em>used</em>", "This invite link has already been used for an interview. If you think this is a mistake, please contact the AI Essentials team on WhatsApp."],
+  expired: ["Link <em>expired</em>", "This invite link has expired. Please ask the AI Essentials team for a new link."],
+  invalid: ["Invalid <em>link</em>", "This invite link isn't valid. Please open the full link the AI Essentials team sent you."],
+  none:    ["Invite <em>only</em>", "This interview opens with a personal invite link. Please use the link the AI Essentials team sent you on WhatsApp."],
+};
+async function api(path, body){
+  const r = await fetch(WORKER + path, body ? { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(body), keepalive: path === "/done" } : {});
+  let j = {}; try { j = await r.json(); } catch(e){}
+  return { ok: r.ok, status: r.status, ...j };
+}
+(async function initInvite(){
+  if (!WORKER) return;
+  if (!INVITE) return lock(...LOCK.none);
+  try {
+    const r = await api("/check?t=" + encodeURIComponent(INVITE));
+    if (!r.ok) return lock(...(LOCK[r.error] || LOCK.invalid));
+    if (r.status === "used") return lock(...LOCK.used);
+    invite = { name: r.name };
+    $("name").value = r.name; $("name").readOnly = true; $("nameLock").hidden = false;
+    $("phoneField").style.display = "none";
+  } catch(e) { setErr("Couldn't verify your invite. Please check your internet and reload."); }
+})();
+
 $("startForm").addEventListener("submit", async e => {
   e.preventDefault(); setErr("");
+  if (WORKER && !invite) { setErr("Please open the personal invite link the AI Essentials team sent you."); return; }
   const name = $("name").value.trim().replace(/\s+/g," ");
   const local = $("phone").value.replace(/\D/g,"");
-  const digits = (local.length > 10 ? "" : "91") + local;
+  const digits = invite ? "" : (local.length > 10 ? "" : "91") + local;
   if (name.length < 2) { setErr("Please enter your full name."); $("name").focus(); return; }
-  if (local.length < 10) { setErr("Please enter a valid WhatsApp number."); $("phone").focus(); return; }
+  if (!invite && local.length < 10) { setErr("Please enter a valid WhatsApp number."); $("phone").focus(); return; }
 
   $("startBtn").disabled = true; $("startTxt").textContent = TXT[lang].starting;
   try { await navigator.mediaDevices.getUserMedia({ audio: true }); }
@@ -415,12 +462,24 @@ $("startForm").addEventListener("submit", async e => {
   await startInterview(name, digits);
 });
 
+let creds = null;
 async function startInterview(name, digits, conn = "webrtc"){
   const first = name.split(" ")[0];
   try {
+    let auth = { agentId: AGENT_ID, connectionType: conn };
+    if (WORKER) {
+      if (!creds) {
+        const r = await api("/start", { t: INVITE });
+        if (!r.ok) { $("startBtn").disabled = false; $("startTxt").textContent = TXT[lang].start; return lock(...(LOCK[r.error] || LOCK.invalid)); }
+        creds = r; digits = r.phone || digits;
+      }
+      auth = (conn === "webrtc" && creds.conversation_token)
+        ? { conversationToken: creds.conversation_token, connectionType: "webrtc" }
+        : { signedUrl: creds.signed_url, connectionType: "websocket" };
+      if (!auth.conversationToken && !auth.signedUrl) throw new Error("no credentials");
+    }
     conv = await Conversation.startSession({
-      agentId: AGENT_ID,
-      connectionType: conn,
+      ...auth,
       userId: digits,
       dynamicVariables: { candidate_name: name, interview_language: lang === "ta" ? "Tamil (Tanglish)" : "English" },
       overrides: { agent: { language: lang, firstMessage: FIRST[lang](first) } },
@@ -455,6 +514,7 @@ async function startInterview(name, digits, conn = "webrtc"){
           $("againBtn").style.display = "inline-block";
           $("againBtn").onclick = () => location.reload();
         } else {
+          if (WORKER && INVITE) api("/done", { t: INVITE }).catch(()=>{});
           $("doneTitle").innerHTML = (lang === "ta" ? "நன்றி, " : "Thank you, ") + `<em></em>`;
           $("doneTitle").querySelector("em").textContent = first;
           $("doneMsg").textContent = lang === "ta"
@@ -466,7 +526,7 @@ async function startInterview(name, digits, conn = "webrtc"){
     });
   } catch (err) {
     console.error(err);
-    if (conn === "webrtc") return startInterview(name, digits, "websocket");
+    if (conn === "webrtc" && (!WORKER || creds?.signed_url)) return startInterview(name, digits, "websocket");
     setErr("Couldn't connect to the interviewer. Please check your internet connection and try again.");
     $("startBtn").disabled = false; $("startTxt").textContent = TXT[lang].start;
   }
