@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Essentials · Interview</title>
+<meta name="description" content="AI voice interview — Community & Customer Engagement Executive at AI Essentials">
+<meta property="og:title" content="AI Essentials · AI Voice Interview">
+<meta property="og:description" content="A friendly 15-minute voice interview in English or Tamil.">
+<meta name="theme-color" content="#0d0b26">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Tamil:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0b26; --bg2:#15123a; --panel:rgba(255,255,255,.06); --stroke:rgba(255,255,255,.12);
+  --text:#f4f3ff; --muted:#a9a6cf; --brand:#6d5cff; --brand2:#9b7bff; --sun:#ffb23f; --ok:#3ddc97; --danger:#ff5d6c;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:#0d0b26}
+html,body{margin:0}
+body{font-family:"Plus Jakarta Sans","Noto Sans Tamil",system-ui,sans-serif;color:var(--text);
+  background:radial-gradient(1200px 700px at 85% -10%,#3a2b9a 0%,transparent 60%),radial-gradient(900px 600px at -10% 110%,#5a2a6e 0%,transparent 55%),var(--bg);
+  background-attachment:fixed;min-height:100vh;min-height:100dvh;overflow-x:hidden}
+.ta{font-family:"Noto Sans Tamil","Plus Jakarta Sans",sans-serif}
+.shell{max-width:1080px;margin:0 auto;padding:max(18px,env(safe-area-inset-top)) 20px max(24px,env(safe-area-inset-bottom));min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0 18px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.2px}
+.mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--brand),var(--sun));display:grid;place-items:center;font-size:15px;color:#fff;box-shadow:0 8px 24px rgba(109,92,255,.45)}
+.brand small{display:block;font-weight:500;color:var(--muted);font-size:12px;letter-spacing:0}
+.chip{font-size:12px;color:var(--muted);border:1px solid var(--stroke);padding:6px 11px;border-radius:999px;background:var(--panel);white-space:nowrap}
+.screen{flex:1;display:none;animation:fade .35s ease}
+.screen.on{display:flex}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ---------- welcome ---------- */
+#welcome{gap:36px;align-items:center}
+.intro{flex:1.1}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--sun);background:rgba(255,178,63,.12);border:1px solid rgba(255,178,63,.3);padding:6px 12px;border-radius:999px;margin-bottom:18px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(61,220,151,.18)}
+h1{font-size:clamp(30px,4.6vw,50px);line-height:1.08;margin:0 0 14px;letter-spacing:-1px;font-weight:800}
+h1 span{background:linear-gradient(90deg,#b9a8ff,var(--sun));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-size:16.5px;line-height:1.6;max-width:520px;margin:0 0 24px}
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:540px}
+.feat{background:var(--panel);border:1px solid var(--stroke);border-radius:14px;padding:13px}
+.feat b{display:block;font-size:20px;margin-bottom:3px}
+.feat span{font-size:12.5px;color:var(--muted)}
+.form{flex:.9;width:100%;max-width:440px;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));border:1px solid var(--stroke);border-radius:24px;padding:26px;backdrop-filter:blur(14px);box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.form h2{margin:0 0 4px;font-size:20px}
+.form p.s{margin:0 0 20px;color:var(--muted);font-size:13.5px}
+label.f{display:block;font-size:12.5px;font-weight:700;color:#d6d3f5;margin:0 0 7px}
+.inp{width:100%;background:rgba(0,0,0,.25);border:1px solid var(--stroke);color:var(--text);border-radius:13px;padding:13px 14px;font:inherit;font-size:15px;outline:none;transition:border .15s, box-shadow .15s;margin-bottom:16px}
+.inp:focus{border-color:var(--brand2);box-shadow:0 0 0 4px rgba(109,92,255,.25)}
+.inp::placeholder{color:#7d7aa6}
+.phone{display:flex;gap:8px}
+.phone .cc{flex:0 0 64px;text-align:center}
+.lang{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.lang button{all:unset;cursor:pointer;border:1.5px solid var(--stroke);border-radius:14px;padding:13px 12px;text-align:center;background:rgba(0,0,0,.2);transition:.15s}
+.lang button b{display:block;font-size:16px}
+.lang button small{color:var(--muted);font-size:12px}
+.lang button.sel{border-color:var(--brand2);background:rgba(109,92,255,.2);box-shadow:0 0 0 4px rgba(109,92,255,.15)}
+.checks{list-style:none;padding:0;margin:0 0 20px;display:grid;gap:8px}
+.checks li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:#d6d3f5}
+.checks li i{flex:0 0 20px;height:20px;border-radius:6px;background:rgba(61,220,151,.15);color:var(--ok);display:grid;place-items:center;font-style:normal;font-size:12px}
+.cta{width:100%;border:none;cursor:pointer;font:inherit;font-weight:800;font-size:16px;color:#fff;padding:16px;border-radius:15px;background:linear-gradient(135deg,var(--brand),#8a5cff);box-shadow:0 14px 34px rgba(109,92,255,.45);display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .1s, filter .15s}
+.cta:hover{filter:brightness(1.08)}
+.cta:active{transform:scale(.985)}
+.cta:disabled{opacity:.6;cursor:progress}
+.err{color:#ffb4bb;font-size:13px;margin:-6px 0 12px;min-height:0}
+.fine{font-size:11.5px;color:#7d7aa6;margin:14px 0 0;text-align:center}
+
+/* ---------- live ---------- */
+#live{flex-direction:column;align-items:center;gap:20px}
+.livebar{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.rec{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px}
+.rec .r{width:9px;height:9px;border-radius:50%;background:var(--danger);animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.timer{font-variant-numeric:tabular-nums;color:var(--muted)}
+.stage{position:relative;width:min(300px,70vw);aspect-ratio:1;display:grid;place-items:center;margin-top:6px}
+.halo{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,rgba(109,92,255,.35),transparent 65%);transition:transform .08s linear}
+.ringA,.ringB{position:absolute;inset:8%;border-radius:50%;border:1.5px solid rgba(185,168,255,.25)}
+.ringB{inset:-2%;border-color:rgba(255,178,63,.15)}
+.orb{width:56%;aspect-ratio:1;border-radius:50%;background:conic-gradient(from 0deg,#6d5cff,#b07bff,#ffb23f,#ff6fa5,#6d5cff);filter:saturate(1.1);box-shadow:0 0 80px rgba(130,100,255,.6), inset 0 0 40px rgba(255,255,255,.35);animation:spin 9s linear infinite;transition:transform .08s linear}
+.orb.listen{background:conic-gradient(from 0deg,#2fd1a0,#3aa0ff,#6d5cff,#2fd1a0);box-shadow:0 0 80px rgba(58,160,255,.5), inset 0 0 40px rgba(255,255,255,.3)}
+@keyframes spin{to{rotate:360deg}}
+.who{text-align:center}
+.who h3{margin:0;font-size:20px}
+.who p{margin:4px 0 0;color:var(--muted);font-size:14px;min-height:20px}
+.caps{width:100%;max-width:720px;flex:1;min-height:140px;max-height:34vh;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding:6px 4px;mask-image:linear-gradient(to bottom,transparent 0,#000 24px)}
+.b{max-width:86%;padding:11px 15px;border-radius:16px;font-size:15px;line-height:1.5;animation:fade .25s ease}
+.b small{display:block;font-size:11px;font-weight:700;opacity:.7;margin-bottom:2px}
+.b.agent{align-self:flex-start;background:rgba(109,92,255,.18);border:1px solid rgba(155,123,255,.3);border-top-left-radius:5px}
+.b.user{align-self:flex-end;background:rgba(61,220,151,.12);border:1px solid rgba(61,220,151,.25);border-top-right-radius:5px}
+.controls{display:flex;gap:14px;align-items:center;padding-bottom:6px}
+.ctl{width:58px;height:58px;border-radius:50%;border:1px solid var(--stroke);background:var(--panel);color:var(--text);display:grid;place-items:center;cursor:pointer;transition:.15s}
+.ctl svg{width:24px;height:24px}
+.ctl.muted{background:#fff;color:#111}
+.end{height:58px;padding:0 26px;border-radius:999px;border:none;background:var(--danger);color:#fff;font:inherit;font-weight:800;font-size:15px;display:flex;align-items:center;gap:9px;cursor:pointer;box-shadow:0 12px 30px rgba(255,93,108,.35)}
+.end svg{width:20px;height:20px}
+.hint{font-size:12.5px;color:#7d7aa6;text-align:center}
+
+/* ---------- done ---------- */
+#done{align-items:center;justify-content:center}
+.donecard{max-width:520px;text-align:center;background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));border:1px solid var(--stroke);border-radius:26px;padding:36px 28px}
+.tick{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;background:linear-gradient(135deg,var(--ok),#1fae7c);display:grid;place-items:center;box-shadow:0 18px 40px rgba(61,220,151,.35)}
+.tick svg{width:42px;height:42px;color:#fff}
+.donecard h2{font-size:26px;margin:0 0 8px}
+.donecard p{color:var(--muted);line-height:1.6;margin:0 0 10px}
+.steps3{display:grid;gap:10px;margin:22px 0 6px;text-align:left}
+.steps3 div{display:flex;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--stroke);border-radius:14px;padding:12px 14px;font-size:14px}
+.steps3 b{flex:0 0 28px;height:28px;border-radius:50%;background:rgba(109,92,255,.3);display:grid;place-items:center;font-size:13px}
+.ghost{margin-top:16px;background:transparent;border:1px solid var(--stroke);color:var(--text);font:inherit;font-weight:700;padding:12px 18px;border-radius:12px;cursor:pointer}
+
+@media (max-width:860px){
+  #welcome{flex-direction:column;gap:24px;align-items:stretch}
+  .form{max-width:none}
+  .feats{grid-template-columns:repeat(3,1fr)}
+  .lead{font-size:15px}
+}
+@media (max-width:420px){ .feats{display:none} nav .chip{display:none} }
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav>
+    <div class="brand"><div class="mark">AI</div><div>AI Essentials<small>Hiring · Chennai</small></div></div>
+    <div class="chip" id="navchip">Community &amp; Customer Engagement Executive</div>
+  </nav>
+
+  <!-- WELCOME -->
+  <section class="screen on" id="welcome">
+    <div class="intro">
+      <div class="eyebrow"><span class="dot"></span>Round 1 · AI voice interview</div>
+      <h1>Talk to <span>Janani</span>,<br>our AI interviewer.</h1>
+      <p class="lead">A relaxed 15-minute voice conversation for the <b style="color:#fff">Community &amp; Customer Engagement Executive</b> role. Speak in English or Tamil — whatever feels natural. No trick questions.</p>
+      <div class="feats">
+        <div class="feat"><b>~15</b><span>minutes</span></div>
+        <div class="feat"><b class="ta">அ / A</b><span>Tamil or English</span></div>
+        <div class="feat"><b>🎙️</b><span>Just your voice</span></div>
+      </div>
+    </div>
+
+    <form class="form" id="startForm" novalidate>
+      <h2>Let's get you started</h2>
+      <p class="s">Takes 10 seconds. Your score card will be shared on WhatsApp.</p>
+
+      <label class="f" for="name">Full name</label>
+      <input class="inp" id="name" autocomplete="name" placeholder="e.g. Priya Ramesh" required>
+
+      <label class="f" for="phone">WhatsApp number</label>
+      <div class="phone">
+        <input class="inp cc" value="+91" id="cc" aria-label="Country code">
+        <input class="inp" id="phone" inputmode="tel" autocomplete="tel-national" placeholder="98765 43210" required>
+      </div>
+
+      <label class="f">Interview language</label>
+      <div class="lang" role="radiogroup">
+        <button type="button" data-lang="en" class="sel" role="radio" aria-checked="true"><b>English</b><small>Simple English</small></button>
+        <button type="button" data-lang="ta" role="radio" aria-checked="false"><b class="ta">தமிழ்</b><small>Tamil + English mix</small></button>
+      </div>
+
+      <ul class="checks">
+        <li><i>✓</i>Sit in a quiet place — headphones help</li>
+        <li><i>✓</i>Allow microphone when your browser asks</li>
+        <li><i>✓</i>Speak naturally, like talking to a real student</li>
+      </ul>
+
+      <div class="err" id="err"></div>
+      <button class="cta" id="startBtn" type="submit">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg>
+        <span id="startTxt">Start interview</span>
+      </button>
+      <p class="fine">Your conversation is recorded and reviewed only by the AI Essentials hiring team.</p>
+    </form>
+  </section>
+
+  <!-- LIVE -->
+  <section class="screen" id="live">
+    <div class="livebar">
+      <div class="rec"><span class="r"></span><span id="liveLabel">Interview in progress</span></div>
+      <div class="timer" id="timer">00:00</div>
+    </div>
+    <div class="stage">
+      <div class="halo" id="halo"></div><div class="ringB"></div><div class="ringA"></div>
+      <div class="orb" id="orb"></div>
+    </div>
+    <div class="who"><h3>Janani</h3><p id="state">Connecting…</p></div>
+    <div class="caps" id="caps" aria-live="polite"></div>
+    <div class="controls">
+      <button class="ctl" id="muteBtn" title="Mute microphone" aria-label="Mute microphone">
+        <svg id="micOn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg>
+        <svg id="micOff" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m2 2 20 20M9 9v3a3 3 0 0 0 5.1 2.1M15 9.3V5a3 3 0 0 0-5.9-.7M19 10v2a7 7 0 0 1-.9 3.4M5 10v2a7 7 0 0 0 11.2 5.6M12 19v3"/></svg>
+      </button>
+      <button class="end" id="endBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 15.5c-1.3 0-2.6-.2-3.8-.6-.4-.1-.8 0-1 .2l-2.2 2.2a15 15 0 0 1-6.6-6.6l2.2-2.2c.3-.3.4-.7.2-1-.4-1.2-.6-2.5-.6-3.8 0-.6-.4-1-1-1H4.5c-.6 0-1 .4-1 1A17.5 17.5 0 0 0 21 20.5c.6 0 1-.4 1-1V16.5c0-.6-.4-1-1-1Z" transform="rotate(135 12 12)"/></svg>End interview</button>
+    </div>
+    <div class="hint" id="hint">Janani will end the call when the interview is complete.</div>
+  </section>
+
+  <!-- DONE -->
+  <section class="screen" id="done">
+    <div class="donecard">
+      <div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg></div>
+      <h2 id="doneTitle">Thank you!</h2>
+      <p id="doneMsg">Your interview is complete. Great job taking the first step with AI Essentials.</p>
+      <div class="steps3">
+        <div><b>1</b>Our team reviews your interview</div>
+        <div><b>2</b>You get your score card on WhatsApp</div>
+        <div><b>3</b>Shortlisted candidates are invited for the next round</div>
+      </div>
+      <button class="ghost" id="againBtn" style="display:none">Reconnect &amp; continue</button>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+import { Conversation } from "./elevenlabs-client.js";
+
+const AGENT_ID = "agent_7801m7m6ywp8fqgrf65ffy86gnv0";
+const $ = id => document.getElementById(id);
+let lang = "en", conv = null, t0 = 0, tick = null, raf = null, muted = false, userEnded = false, connectedOnce = false;
+
+const FIRST = {
+  en: n => `Hi ${n}, welcome! I'm Janani, the AI interviewer for AI Essentials. This is a relaxed, fifteen-minute chat for the Community and Customer Engagement Executive role. No trick questions — just talk to me the way you'd talk to a real student. Ready? To start, tell me a little about yourself and any work you've done with customers.`,
+  ta: n => `வணக்கம் ${n}! நான் Janani, AI Essentials-ஓட AI interviewer. இது Community and Customer Engagement Executive role-க்கான ஒரு relaxed-ஆன fifteen minutes conversation. Tricky questions எதுவும் இல்ல — ஒரு real student கிட்ட பேசுற மாதிரி natural-ஆ பேசுங்க. Start பண்ணலாமா? முதல்ல, உங்கள பத்தியும், customers கூட நீங்க பண்ண work பத்தியும் கொஞ்சம் சொல்லுங்க.`
+};
+const TXT = {
+  en: { speaking:"Speaking…", listening:"Listening — your turn", connecting:"Connecting…", start:"Start interview", starting:"Connecting…" },
+  ta: { speaking:"பேசிக்கொண்டிருக்கிறார்…", listening:"கேட்கிறார் — நீங்க பேசுங்க", connecting:"Connect ஆகுது…", start:"Interview ஆரம்பிக்கலாம்", starting:"Connect ஆகுது…" }
+};
+
+/* language picker */
+document.querySelectorAll(".lang button").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".lang button").forEach(x => { x.classList.remove("sel"); x.setAttribute("aria-checked","false"); });
+  b.classList.add("sel"); b.setAttribute("aria-checked","true"); lang = b.dataset.lang;
+  $("startTxt").textContent = TXT[lang].start;
+});
+
+function show(id){ document.querySelectorAll(".screen").forEach(s => s.classList.toggle("on", s.id === id)); window.scrollTo(0,0); }
+function setErr(m){ $("err").textContent = m || ""; }
+const fmt = s => `${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`;
+
+function addCap(role, text){
+  if (!text) return;
+  const el = document.createElement("div");
+  el.className = "b " + (role === "user" ? "user" : "agent");
+  if (/[஀-௿]/.test(text)) el.classList.add("ta");
+  el.innerHTML = `<small>${role === "user" ? "You" : "Janani"}</small>`;
+  el.appendChild(document.createTextNode(text.replace(/\[[a-z ]+\]\s*/gi,"")));
+  $("caps").appendChild(el);
+  $("caps").scrollTop = $("caps").scrollHeight;
+}
+
+function animate(){
+  if (!conv) return;
+  let out = 0, inp = 0;
+  try { out = conv.getOutputVolume?.() || 0; inp = conv.getInputVolume?.() || 0; } catch(e){}
+  const v = Math.max(out, inp * 0.8);
+  $("orb").style.transform = `scale(${1 + Math.min(v, 1) * 0.35})`;
+  $("halo").style.transform = `scale(${1 + Math.min(v, 1) * 0.5})`;
+  raf = requestAnimationFrame(animate);
+}
+
+function stopAll(){
+  clearInterval(tick); cancelAnimationFrame(raf);
+}
+
+$("startForm").addEventListener("submit", async e => {
+  e.preventDefault(); setErr("");
+  const name = $("name").value.trim().replace(/\s+/g," ");
+  const digits = ($("cc").value + $("phone").value).replace(/\D/g,"");
+  if (name.length < 2) { setErr("Please enter your full name."); $("name").focus(); return; }
+  if ($("phone").value.replace(/\D/g,"").length < 10) { setErr("Please enter a valid WhatsApp number."); $("phone").focus(); return; }
+
+  $("startBtn").disabled = true; $("startTxt").textContent = TXT[lang].starting;
+  try {
+    await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch (err) {
+    setErr("Microphone access is needed for the interview. Please allow the mic in your browser settings and try again.");
+    $("startBtn").disabled = false; $("startTxt").textContent = TXT[lang].start; return;
+  }
+  await startInterview(name, digits);
+});
+
+async function startInterview(name, digits, conn = "webrtc"){
+  const first = name.split(" ")[0];
+  try {
+    conv = await Conversation.startSession({
+      agentId: AGENT_ID,
+      connectionType: conn,
+      userId: digits,
+      dynamicVariables: { candidate_name: name, interview_language: lang === "ta" ? "Tamil (Tanglish)" : "English" },
+      overrides: { agent: { language: lang, firstMessage: FIRST[lang](first) } },
+      onConnect: () => {
+        connectedOnce = true;
+        show("live");
+        $("state").textContent = TXT[lang].connecting;
+        t0 = Date.now();
+        tick = setInterval(() => $("timer").textContent = fmt(Math.floor((Date.now()-t0)/1000)), 500);
+        animate();
+      },
+      onModeChange: ({ mode }) => {
+        $("state").textContent = mode === "speaking" ? TXT[lang].speaking : TXT[lang].listening;
+        $("orb").classList.toggle("listen", mode !== "speaking");
+      },
+      onMessage: (p) => {
+        const role = p.role || p.source || "agent";
+        addCap(role === "ai" ? "agent" : role, p.message);
+      },
+      onError: (msg) => { console.error("Conversation error", msg); },
+      onDisconnect: (d) => {
+        stopAll();
+        const secs = t0 ? Math.floor((Date.now()-t0)/1000) : 0;
+        conv = null;
+        if (!connectedOnce) return;
+        if (!userEnded && d?.reason === "error" && secs < 600) {
+          $("doneTitle").textContent = "Connection dropped";
+          $("doneMsg").textContent = "Your connection was interrupted. Don't worry — please check your internet and reconnect to continue.";
+          $("againBtn").style.display = "inline-block";
+          $("againBtn").onclick = () => location.reload();
+        } else {
+          $("doneTitle").textContent = lang === "ta" ? `நன்றி, ${first}! 🙌` : `Thank you, ${first}! 🙌`;
+          $("doneMsg").textContent = lang === "ta"
+            ? "உங்க interview முடிஞ்சுது. AI Essentials team review பண்ணிட்டு உங்க score card-ஐ WhatsApp-ல அனுப்புவாங்க."
+            : "Your interview is complete. The AI Essentials team will review it and send your score card on WhatsApp.";
+        }
+        show("done");
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    if (conn === "webrtc") return startInterview(name, digits, "websocket");
+    setErr("Couldn't connect to the interviewer. Please check your internet connection and try again.");
+    $("startBtn").disabled = false; $("startTxt").textContent = TXT[lang].start;
+  }
+}
+
+$("muteBtn").onclick = () => {
+  if (!conv) return;
+  muted = !muted;
+  try { conv.setMicMuted(muted); } catch(e){}
+  $("muteBtn").classList.toggle("muted", muted);
+  $("micOn").style.display = muted ? "none" : ""; $("micOff").style.display = muted ? "" : "none";
+};
+$("endBtn").onclick = async () => {
+  const ok = $("endBtn").dataset.confirm === "1";
+  if (!ok) { $("endBtn").dataset.confirm = "1"; $("endBtn").lastChild.textContent = "Tap again to end"; setTimeout(()=>{ $("endBtn").dataset.confirm=""; $("endBtn").lastChild.textContent="End interview"; }, 3000); return; }
+  userEnded = true;
+  try { await conv?.endSession(); } catch(e){}
+};
+window.addEventListener("beforeunload", e => { if (conv) { e.preventDefault(); e.returnValue = ""; } });
+</script>
+</body>
+</html>
